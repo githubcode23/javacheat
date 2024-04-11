@@ -1,0 +1,21 @@
+ package day1; public class construc { int age;
+String name; public construc() {
+System.out.println("Default Constructor");
+} public construc(int age,String name) { this.age=age; this.name=name;
+}
+construc(construc cons) { this.age=cons.age; this.name=cons.name;
+} void show() {
+System.out.println(age+" "+name);
+}
+public static void main(String[] args) { construc c=new construc(19,"Bavadurga"); System.out.println("with argument constructor");
+c.show();
+System.out.println("copy constructor"); construc c1=new construc(c); c1.show();
+}
+}
+Write a program to create a class and implement the concepts of  Static methods. package day5; public class SMethod { static int add(int num1, int num2){ return num1+num2; 
+}
+public static void main(String[] args) { SMethod m= new SMethod(); 
+int s=add(4, 4); 
+System.out.print(s); 
+} 
+} 
