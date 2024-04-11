@@ -1,0 +1,23 @@
+package day5; interface Iface{ void display(); void show(); 
+} 
+public class Interface implements Iface { 
+@Override public void show() { 
+System.out.println("Interface."); 
+} 
+@Override 
+public void display() { 
+System.out.println("all methods are abstract inside the interface.."); 
+} 
+public static void main(String[] args) { Interface i=new Interface();
+i.show();
+i.display();
+}
+}
+Write a program to raise built-in exceptions and raise them as per  the requirements. package day5; public class ExceptionHandling { public static void main(String[] args) { try { 
+int num=10/0; 
+System.out.println(num); 
+}catch(Exception e) { 
+System.out.println("Zero Division Error.."); 
+} 
+} 
+}
