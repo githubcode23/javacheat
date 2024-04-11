@@ -1,0 +1,22 @@
+ package day5; class myException extends Exception{ public myException(String s) { super(s); 
+} 
+} public class UserDefinedException { public static void main(String[] args) { try { 
+throw new myException("User Defined Exception.."); 
+}catch(Exception e) { 
+System.out.println("Catch Block.."); 
+System.out.println(e.getMessage()); 
+} 
+} 
+}
+Write a program to implement the concepts of Abstract classes and  methods package day5; abstract class abstractclass{ abstract void display(); void show() { 
+System.out.println("Abstract method is overriden"); 
+}
+} public class Aclass extends abstractclass {
+@Override
+void display() {
+System.out.println("Abstract method.");
+} public static void main(String[] args) { Aclass a=new Aclass();
+a.display();
+a.show();
+}
+}
