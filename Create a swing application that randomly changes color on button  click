@@ -1,0 +1,19 @@
+. package day6; import javax.swing.*; import java.awt.*; import java.awt.event.ActionEvent; import java.awt.event.ActionListener; import java.util.Random; public class RandomColorChangeApp extends JFrame{ private JPanel colorPanel; private JButton changeColorButton; public RandomColorChangeApp() {
+setTitle("Random Color Change App"); setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); setSize(300,200); setLocationRelativeTo(null); colorPanel=new JPanel(); colorPanel.setBackground(Color.WHITE); changeColorButton=new JButton("Change color"); changeColorButton.addActionListener(new ActionListener() {
+@Override public void actionPerformed(ActionEvent e) { changeBackgroundColor();
+}
+});
+JPanel buttonPanel=new JPanel(); buttonPanel.add(changeColorButton); setLayout(new BorderLayout()); add(colorPanel,BorderLayout.CENTER); add(buttonPanel,BorderLayout.SOUTH);
+}
+private void changeBackgroundColor() { Random random=new Random(); int red =random.nextInt(256); int green=random.nextInt(256); int blue=random.nextInt(256);
+Color randomColor=new Color(red,green,blue); colorPanel.setBackground(randomColor);
+} public static void main(String[] args) {
+SwingUtilities.invokeLater(new Runnable() {
+@Override
+public void run() {
+RandomColorChangeApp app=new RandomColorChangeApp();
+app.setVisible(true);
+}
+});
+}
+}
