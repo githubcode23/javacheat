@@ -1,0 +1,26 @@
+package day1; class calculator{ void add() { int a=10; int b=50; int c=a+b; 
+System.out.println(c); 
+} 
+void add(String name) { 
+System.out.println(name); 
+} 
+void add(int num1,int num2) { int c=num1+num2; 
+System.out.println(c); 
+} 
+} 
+public class MethodOverloading { public static void main(String[] args) { calculator obj=new calculator(); obj.add("Bavadurga"); 
+} }
+Write a program to implement the concepts of Inheritance and  Method overriding.
+package day5; class Bu alo { void eat() { 
+System.out.println("Bu alo eats more grass."); 
+} 
+} 
+class Cow extends Bu alo{ 
+void eat() { 
+System.out.println("Cow eats more grass."); 
+} 
+} 
+public class MethodOveriding { public static void main(String[] args) { Bu alo b= new Cow(); 
+b.eat(); 
+} 
+}
