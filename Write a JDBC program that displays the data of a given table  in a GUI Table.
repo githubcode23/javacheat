@@ -1,0 +1,42 @@
+package day5;
+import javax.swing.*; import java.awt.*; import java.sql.*;
+public class TableDisplay extends JFrame {     private JTable table;
+    public TableDisplay() {         super("Table Display");
+        String[][] data = new String[0][0];         String[] columnNames = new String[0];
+        try {
+            // Load the MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish connection to the MySQL database
+            Connection conn = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/sybscitb1", "root", "Gnc123");
+            // Create a statement with scrollable result set
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, 
+ResultSet.CONCUR_READ_ONLY);
+            // Execute a query to retrieve data from the database table
+            ResultSet rs = stmt.executeQuery("SELECT * FROM student");
+            // Get metadata about the result set
+            ResultSetMetaData metaData = rs.getMetaData();             int columnCount = metaData.getColumnCount();             columnNames = new String[columnCount];
+            for (int i = 1; i <= columnCount; i++) {                 columnNames[i - 1] = metaData.getColumnName(i);
+            }
+            // Move to last row to determine the number of rows
+            rs.last();
+            int numRows = rs.getRow();             rs.beforeFirst();
+            // Initialize the data array to store the retrieved data             data = new String[numRows][columnCount];
+            int row = 0;
+            // Iterate over the result set and store the data in the data array             while (rs.next()) {                 for (int i = 1; i <= columnCount; i++) {                     data[row][i - 1] = rs.getString(i);
+                }                 row++;             }
+            // Close the database connection             conn.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            // Handle any exceptions that occur during database connection or query execution             e.printStackTrace();
+            // Display an error message to the user
+            JOptionPane.showMessageDialog(this, "Error: Unable to connect to database or retrieve data.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // Create a JTable with the retrieved data and column names         table = new JTable(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);         getContentPane().add(scrollPane, BorderLayout.CENTER);
+        setSize(600, 400);         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);         setLocationRelativeTo(null);         setVisible(true);
+    }
+    public static void main(String[] args) {
+// Create an instance of TableDisplay on the event dispatch thread
+SwingUtilities.invokeLater(TableDisplay::new);
+    }
+}
