@@ -1,0 +1,40 @@
+package day5; import javax.swing.*; import java.awt.*; import java.awt.event.*; import java.sql.*;
+public class ProductDetails extends JFrame {     private JComboBox<String> productComboBox;     private JTextArea detailsTextArea;     private Connection connection;
+    public ProductDetails() {         // Setting up the JFrame         super("Product Details"); // Set the title of the JFrame         setSize(400, 300);         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        productComboBox = new JComboBox<>(); detailsTextArea = new JTextArea(); detailsTextArea.setEditable(false);
+        JPanel mainPanel = new JPanel(new BorderLayout());         mainPanel.add(productComboBox, BorderLayout.NORTH);         mainPanel.add(new JScrollPane(detailsTextArea), BorderLayout.CENTER);         add(mainPanel);
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbbatch1", 
+"root", "Gnc123");             loadProductNames();         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        productComboBox.addActionListener(new ActionListener() {             public void actionPerformed(ActionEvent e) {                 showProductDetails();
+            }
+        });
+    }
+    private void loadProductNames() throws SQLException {
+        String query = "SELECT productName FROM products";
+        Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query); while (resultSet.next()) {             productComboBox.addItem(resultSet.getString("productName"));
+        }
+    }
+    private void showProductDetails() {
+        String selectedProductName = (String) productComboBox.getSelectedItem();         if (selectedProductName != null) {
+            String query = "SELECT * FROM products WHERE name = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);                 preparedStatement.setString(1, selectedProductName);                 ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {                     int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");                     double price = resultSet.getDouble("price");                     int quantity = resultSet.getInt("quantity");
+                    String details = "ID: " + id + "\nName: " + name + "\nPrice: $" + price + "\nQuantity: " + quantity;
+                    detailsTextArea.setText(details);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void main(String[] args) {         SwingUtilities.invokeLater(new Runnable() {
+            public void run() {                 new ProductDetails().setVisible(true);
+            }
+        });
+    }
+}
