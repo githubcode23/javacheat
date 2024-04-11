@@ -1,0 +1,42 @@
+package day5; import javax.swing.*; import java.awt.*; import java.awt.event.*; import java.sql.*; public class ResultSetNavigatorApp extends JFrame { private JButton previousButton;     private JButton nextButton;     private JTextArea resultTextArea;     private Connection connection;     private Statement statement;     private ResultSet resultSet;
+    public ResultSetNavigatorApp() {
+        super("ResultSet Navigator");         setSize(400, 300);         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        previousButton = new JButton("Previous");         nextButton = new JButton("Next");         resultTextArea = new JTextArea();         resultTextArea.setEditable(false);
+        JPanel buttonPanel = new JPanel(new FlowLayout());         buttonPanel.add(previousButton);         buttonPanel.add(nextButton);
+        JPanel mainPanel = new JPanel(new BorderLayout());         mainPanel.add(buttonPanel, BorderLayout.NORTH);         mainPanel.add(new JScrollPane(resultTextArea), BorderLayout.CENTER);         add(mainPanel);
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbbatch1", 
+"root", "Gnc123");
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);             resultSet = statement.executeQuery("SELECT * FROM products");             displayCurrentRow();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        previousButton.addActionListener(new ActionListener() {             public void actionPerformed(ActionEvent e) {
+                try {                     if (resultSet.previous()) {                         displayCurrentRow();
+                    }
+                } catch (SQLException ex) {                     ex.printStackTrace();
+                }
+            }
+        });
+        nextButton.addActionListener(new ActionListener() {             public void actionPerformed(ActionEvent e) {
+                try {                     if (resultSet.next()) {                         displayCurrentRow();
+                    }
+                } catch (SQLException ex) {                     ex.printStackTrace();
+                }
+            }
+        });
+    }
+private void displayCurrentRow() throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        ResultSetMetaData metaData = resultSet.getMetaData();         int columnCount = metaData.getColumnCount();
+        for (int i = 1; i <= columnCount; i++) {
+            sb.append(metaData.getColumnName(i)).append(": ").append(resultSet.getString(i)).append("\n");
+        }
+        resultTextArea.setText(sb.toString());
+    }
+    public static void main(String[] args) {         SwingUtilities.invokeLater(new Runnable() {
+            public void run() {                 new ResultSetNavigatorApp().setVisible(true);
+            }
+        });
+    }
+} 
